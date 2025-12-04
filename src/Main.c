@@ -4,8 +4,7 @@
 #include "/home/codeleaded/System/Static/Library/AffineTransform.h"
 
 
-float x;
-float y;
+Vec2 pos;
 float s;
 float a;
 
@@ -18,16 +17,18 @@ void Setup(AlxWindow* w){
     transform = AffineTransform_New();
     sp = Sprite_Load("./data/Car_Green_Fast.png");
 
-    x = 0.0f;
-    y = 0.0f;
+    pos.x = 0.0f;
+    pos.y = 0.0f;
     s = 1.0f;
     a = 0.0f;
 }
 void Update(AlxWindow* w){
-    if(Stroke(ALX_KEY_W).DOWN)      y -= 10.0f * w->ElapsedTime;
-    if(Stroke(ALX_KEY_S).DOWN)      y += 10.0f * w->ElapsedTime;
-    if(Stroke(ALX_KEY_A).DOWN)      x -= 10.0f * w->ElapsedTime;
-    if(Stroke(ALX_KEY_D).DOWN)      x += 10.0f * w->ElapsedTime;
+    Vec2 front = Vec2_Mulf(Vec2_OfAngle(-a),400.0f * w->ElapsedTime);
+
+    if(Stroke(ALX_KEY_W).DOWN)      pos = Vec2_Add(pos,front);
+    if(Stroke(ALX_KEY_S).DOWN)      pos = Vec2_Sub(pos,front);
+    if(Stroke(ALX_KEY_A).DOWN)      pos = Vec2_Add(pos,Vec2_Perp(front));
+    if(Stroke(ALX_KEY_D).DOWN)      pos = Vec2_Sub(pos,Vec2_Perp(front));
     
     if(Stroke(ALX_KEY_UP).DOWN)     s -= 1.0f * w->ElapsedTime;
     if(Stroke(ALX_KEY_DOWN).DOWN)   s += 1.0f * w->ElapsedTime;
@@ -53,7 +54,7 @@ void Update(AlxWindow* w){
             const Vec2 rp = { area.p.x + j,area.p.y + i };
             const Vec2 p = AffineTransform_Calc(&transform,rp);
             const Pixel col = Sprite_Get(&sp,p.x,p.y);
-            RenderPixel(x + rp.x,y + rp.y,col);
+            RenderPixel(pos.x + rp.x,pos.y + rp.y,col);
         }
     }
 }
