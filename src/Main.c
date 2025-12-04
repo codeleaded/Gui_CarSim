@@ -1,40 +1,39 @@
 #include "/home/codeleaded/System/Static/Library/WindowEngine1.0.h"
-#include "/home/codeleaded/System/Static/Library/ASprite.h"
+#include "/home/codeleaded/System/Static/Library/TDCar.h"
 
 
-Vec2 pos;
-float vel;
-ASprite car;
+TDCar car;
 
 void Setup(AlxWindow* w){
     ResizeAlxFont(8,8);
 
-    car = ASprite_New("./data/Car_Green_Fast.png");
-    pos = (Vec2){ 0.0f,0.0f };
-    vel = 0.0f;
+    car = TDCar_New((Vec2){ 0.0f,0.0f },"./data/Car_Green_Fast.png");
 }
 void Update(AlxWindow* w){
-    Vec2 front = Vec2_Mulf(Vec2_OfAngle(-car.a),1000.0f * w->ElapsedTime);
+    if(Stroke(ALX_KEY_W).DOWN)          TDCar_Acc(&car, 1.0f,w->ElapsedTime);
+    if(Stroke(ALX_KEY_S).DOWN)          TDCar_Acc(&car,-1.0f,w->ElapsedTime);
+    if(Stroke(ALX_KEY_SPACE).DOWN)      TDCar_Break(&car,0.98f);
+    if(Stroke(ALX_KEY_ENTER).DOWN)      TDCar_Start(&car);
+    
+    //if(Stroke(ALX_KEY_UP).DOWN)       TDCar_Scale(&car, 1.0f * w->ElapsedTime);
+    //if(Stroke(ALX_KEY_DOWN).DOWN)     TDCar_Scale(&car,-1.0f * w->ElapsedTime);
 
-    if(Stroke(ALX_KEY_W).DOWN)      vel += 1000.0f * w->ElapsedTime;
-    if(Stroke(ALX_KEY_S).DOWN)      vel -= 1000.0f * w->ElapsedTime;
-    if(Stroke(ALX_KEY_SPACE).DOWN)  vel *= 0.975f;
+    if(Stroke(ALX_KEY_UP).PRESSED)      TDCar_Gear(&car,car.gear + 1);
+    if(Stroke(ALX_KEY_DOWN).PRESSED)    TDCar_Gear(&car,car.gear - 1);
     
-    if(Stroke(ALX_KEY_UP).DOWN)     ASprite_Update(&car,car.s + 1.0f * w->ElapsedTime,car.a);
-    if(Stroke(ALX_KEY_DOWN).DOWN)   ASprite_Update(&car,car.s - 1.0f * w->ElapsedTime,car.a);
+    if(Stroke(ALX_KEY_LEFT).DOWN)       TDCar_Turn(&car, F32_PI * w->ElapsedTime);
+    if(Stroke(ALX_KEY_RIGHT).DOWN)      TDCar_Turn(&car,-F32_PI * w->ElapsedTime);
     
-    if(Stroke(ALX_KEY_LEFT).DOWN)   ASprite_Update(&car,car.s,car.a + F32_PI * w->ElapsedTime);
-    if(Stroke(ALX_KEY_RIGHT).DOWN)  ASprite_Update(&car,car.s,car.a - F32_PI * w->ElapsedTime);
-    
-    vel *= 0.999f;
-    pos = Vec2_Add(pos,Vec2_Mulf(Vec2_OfAngle(-car.a),vel * w->ElapsedTime));
+    TDCar_Update(&car,w->ElapsedTime);
     
     Clear(DARK_BLUE);
 
-    ASprite_Render(WINDOW_STD_ARGS,&car,pos.x,pos.y);
+    TDCar_Render(WINDOW_STD_ARGS,&car);
+    TDCar_RenderSpeed(WINDOW_STD_ARGS,&car,200.0f,GetHeight() - 200.0f,200.0f);
+    TDCar_RenderWTN(WINDOW_STD_ARGS,&car,600.0f,GetHeight() - 200.0f,200.0f);
 }
 void Delete(AlxWindow* w){
-    ASprite_Free(&car);
+    TDCar_Free(&car);
 }
 
 int main(){
