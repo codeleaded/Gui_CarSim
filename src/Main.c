@@ -8,14 +8,27 @@ void Setup(AlxWindow* w){
     ResizeAlxFont(10,10);
 
     world = TDWorld_New(100,100,(Sprite[]){
-        Sprite_Load("./data/Track_Straight.png"),
-        Sprite_Load("./data/Track_Curve.png"),
-        Sprite_Load("./data/Track_Grass.png"),
+        Sprite_Load("./data/Track_Right.png"),
+        Sprite_Load("./data/Track_Top.png"),
         Sprite_None()
     });
     TDWorld_LoadCar(&world,50.0f,50.0f,"./data/Car_Green_Fast.png");
 }
 void Update(AlxWindow* w){
+    TransformedView_HandlePanZoom(&world.tv,w->Strokes,(Vec2){ (float)w->MouseX,(float)w->MouseY });
+    TransformedView_Focus(&world.tv,&world.car.pos);
+    
+    if(Stroke(ALX_MOUSE_L).PRESSED){
+        const Vec2 m_world = TransformedView_ScreenWorldPos(&world.tv,(Vec2){ (float)w->MouseX,(float)w->MouseY });
+        if(m_world.x >= 0 && m_world.x < (int)world.width && m_world.y >= 0 && m_world.y < (int)world.height){
+            const unsigned int tx = (unsigned int)m_world.x;
+            const unsigned int ty = (unsigned int)m_world.y;
+            const unsigned int index = ty * world.width + tx;
+            world.world[index] = (world.world[index] + 1) % 3;
+        }
+    }
+
+
     if(Stroke(ALX_KEY_W).DOWN)          TDCar_Acc(&world.car, 1.0f,w->ElapsedTime);
     if(Stroke(ALX_KEY_S).DOWN)          TDCar_Acc(&world.car,-1.0f,w->ElapsedTime);
     if(Stroke(ALX_KEY_SPACE).DOWN)      TDCar_Break(&world.car,0.98f);
