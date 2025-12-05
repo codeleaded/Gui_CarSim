@@ -5,7 +5,7 @@
 TDCar car;
 
 void Setup(AlxWindow* w){
-    ResizeAlxFont(8,8);
+    ResizeAlxFont(10,10);
 
     car = TDCar_New((Vec2){ 0.0f,0.0f },"./data/Car_Green_Fast.png");
 }
@@ -29,8 +29,8 @@ void Update(AlxWindow* w){
     Clear(DARK_BLUE);
 
     TDCar_Render(WINDOW_STD_ARGS,&car);
-    TDCar_RenderSpeed(WINDOW_STD_ARGS,&car,200.0f,GetHeight() - 200.0f,200.0f);
-    TDCar_RenderWTN(WINDOW_STD_ARGS,&car,600.0f,GetHeight() - 200.0f,200.0f);
+    TDCar_RenderSpeed(WINDOW_STD_ARGS,&window.AlxFont,&car,200.0f,GetHeight() - 200.0f,200.0f);
+    TDCar_RenderWTN(WINDOW_STD_ARGS,&window.AlxFont,&car,600.0f,GetHeight() - 200.0f,200.0f);
 }
 void Delete(AlxWindow* w){
     TDCar_Free(&car);
