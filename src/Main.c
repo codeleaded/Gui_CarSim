@@ -42,7 +42,7 @@ void Update(AlxWindow* w){
     
     TDCar_Update(&world.car,w->ElapsedTime);
     
-    Clear(DARK_BLUE);
+    Clear(LIGHT_BLUE);
 
     //TDCar_Render(WINDOW_STD_ARGS,&car);
 
