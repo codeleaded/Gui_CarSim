@@ -37,7 +37,7 @@ void Setup(AlxWindow* w){
 }
 void Update(AlxWindow* w){
     TransformedView_HandlePanZoom(&world.tv,w->Strokes,(Vec2){ (float)w->MouseX,(float)w->MouseY });
-    TransformedView_Focus(&world.tv,&world.car.pos);
+    TransformedView_Focus(&world.tv,&world.car.pos,(Vec2){ world.car.car.sprite.w,world.car.car.sprite.h });
     
     if(Stroke(ALX_MOUSE_L).PRESSED){
         const Vec2 m_world = TransformedView_ScreenWorldPos(&world.tv,(Vec2){ (float)w->MouseX,(float)w->MouseY });
