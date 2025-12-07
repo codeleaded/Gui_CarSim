@@ -22,13 +22,13 @@ void Setup(AlxWindow* w){
             Sprite_Load("./assets/Track_Left_Cross.png"),
             Sprite_Load("./assets/Track_Down_Cross.png"),
             Sprite_Load("./assets/Track_Middle.png"),
-            Sprite_None()
+            Sprite_Null()
         });
     }else{
         world = TDWorld_New(100,100,(Sprite[]){
             Sprite_Load("./assets/Track_Right.png"),
             Sprite_Load("./assets/Track_Top.png"),
-            Sprite_None()
+            Sprite_Null()
         });
     }
     TDWorld_LoadCar(&world,50.0f,50.0f,"./assets/Car_Green_Fast.png");
